@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# SEO best practices
+Crawl-delay: 1
+
+# Komunikaty o ostatniej aktualizacji
+# Ostatnia aktualizacja: 2026-10-26T15:57:17.600Z
+
+Sitemap: https://marekbaranski.pl/sitemap.xml
