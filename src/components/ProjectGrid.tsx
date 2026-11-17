@@ -199,9 +199,13 @@ export default function ProjectGrid({ projects }: { projects: Project[] }) {
                   {active.highlights.map((h) => (
                     <li
                       key={h}
-                      className="relative pl-5 text-[0.9375rem] leading-[1.65] text-ink-soft before:absolute before:left-0 before:top-2 before:h-1.5 before:w-1.5 before:rounded-full before:bg-accent"
+                      className="flex items-start gap-3.5 text-[0.9375rem] leading-[1.65] text-ink-soft"
                     >
-                      {h}
+                      <span
+                        aria-hidden="true"
+                        className="mt-[0.4em] h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
+                      />
+                      <span>{h}</span>
                     </li>
                   ))}
                 </ul>

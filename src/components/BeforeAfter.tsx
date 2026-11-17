@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type Props = {
   beforeSrc: string;
@@ -12,8 +12,11 @@ type Props = {
 };
 
 /**
- * Suwak „przed / po” — czysty CSS + natywny <input type="range">.
- * Bez bibliotek, dostępny z klawiatury (strzałki), zero kosztu wydajności.
+ * Suwak „przed / po” — pointer events (mysz + dotyk + rysik).
+ * Przeciąganie działa w dowolnym miejscu obrazu i poza jego obszarem
+ * (nasłuch na window podczas przeciągania). Bez pointer capture,
+ * bez bibliotek. Dostępność: ukryty <input type="range"> obsługuje
+ * klawiaturę (strzałki) i czytniki ekranu.
  */
 export default function BeforeAfter({
   beforeSrc,
@@ -24,15 +27,53 @@ export default function BeforeAfter({
   afterLabel = "Po",
 }: Props) {
   const [value, setValue] = useState(50);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const draggingRef = useRef(false);
+
+  const setFromClientX = useCallback((clientX: number) => {
+    const el = containerRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    if (rect.width === 0) return;
+    const pct = ((clientX - rect.left) / rect.width) * 100;
+    setValue(Math.min(100, Math.max(0, pct)));
+  }, []);
+
+  // Nasłuchy podpinane raz przy montowaniu — łapiemy pointerup nawet przy
+  // błyskawicznym kliknięciu (bez wyścigu z renderem Reacta).
+  useEffect(() => {
+    const onMove = (e: PointerEvent) => {
+      if (draggingRef.current) setFromClientX(e.clientX);
+    };
+    const stop = () => {
+      draggingRef.current = false;
+    };
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", stop);
+    window.addEventListener("pointercancel", stop);
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", stop);
+      window.removeEventListener("pointercancel", stop);
+    };
+  }, [setFromClientX]);
 
   return (
     <div className="relative select-none overflow-hidden rounded-2xl border border-line bg-paper">
-      <div className="relative aspect-[16/10]">
+      <div
+        ref={containerRef}
+        className="relative aspect-[16/10] touch-none cursor-col-resize"
+        onPointerDown={(e) => {
+          e.preventDefault();
+          draggingRef.current = true;
+          setFromClientX(e.clientX);
+        }}
+      >
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={afterSrc} alt={afterAlt} width={1200} height={750} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
+        <img src={afterSrc} alt={afterAlt} width={1200} height={750} loading="lazy" decoding="async" draggable={false} className="pointer-events-none absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - value}% 0 0)` }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={beforeSrc} alt={beforeAlt} width={1200} height={750} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
+          <img src={beforeSrc} alt={beforeAlt} width={1200} height={750} loading="lazy" decoding="async" draggable={false} className="pointer-events-none absolute inset-0 h-full w-full object-cover" />
         </div>
 
         {/* linia podziału + uchwyt */}
@@ -51,18 +92,17 @@ export default function BeforeAfter({
           {afterLabel}
         </span>
 
-        <label className="absolute inset-0 cursor-col-resize">
-          <span className="sr-only">Porównanie: przeciągnij, aby zobaczyć przed i po</span>
-          <input
-            type="range"
-            min={0}
-            max={100}
-            value={value}
-            onChange={(e) => setValue(Number(e.target.value))}
-            className="h-full w-full cursor-col-resize opacity-0"
-            aria-label="Suwak porównania przed i po"
-          />
-        </label>
+        {/* Dostępność: ukryty range — klawiatura (strzałki) + czytnik ekranu */}
+        <input
+          type="range"
+          min={0}
+          max={100}
+          step={1}
+          value={Math.round(value)}
+          onChange={(e) => setValue(Number(e.target.value))}
+          className="sr-only"
+          aria-label="Suwak porównania przed i po"
+        />
       </div>
     </div>
   );

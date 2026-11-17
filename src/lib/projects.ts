@@ -90,4 +90,22 @@ export const projects: Project[] = [
       "Efekt: klient przychodzi zdecydowany, a nie „dopytać”.",
     ],
   },
+  {
+    title: "Key Multi Serwis — wersja demonstracyjna",
+    kind: "Demo",
+    description:
+      "Wersja demonstracyjna strony dla punktu usług w Zielonej Górze: dorabianie kluczy, kodowanie immobilizerów, pieczątki, grawer, ostrzenie, zegarmistrz i szewc. Dziewięć usług pod jednym adresem, każda z osobną podstroną, orientacyjną ceną i czasem realizacji. Dane przykładowe.",
+    tech: ["Kod od zera", "FAQ widoczne w Google", "Dane firmy dla Google"],
+    trade: "Usługi lokalne",
+    link: "https://key-multi-serwis.netlify.app/",
+    note: "Wersja demonstracyjna — dane przykładowe, nie jest to strona rzeczywistego klienta.",
+    image: "/portfolio/key-multi-serwis.jpg",
+    imageAlt:
+      "Zrzut ekranu strony Key Multi Serwis — niebieska sekcja powitalna z hasłem „Dorabianie kluczy i kodowanie immobilizerów — Zielona Góra”",
+    highlights: [
+      "Problem: usługi rozrzucone po mieście — klient dzwoni w kilka miejsc, żeby poznać cenę i czas.",
+      "Rozwiązanie: dziewięć usług pod jednym adresem, każda z osobną podstroną, ceną i czasem realizacji.",
+      "Efekt: jedna wizyta i jeden telefon zamiast objeżdżania miasta.",
+    ],
+  },
 ];

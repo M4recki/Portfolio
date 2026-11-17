@@ -11,7 +11,7 @@ import { SITE_URL } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Portfolio",
   description:
-    "Projekty i wersje demonstracyjne stron dla rzemieślników — warsztat samochodowy, tartak, wykończenia wnętrz. Zobacz strukturę, teksty i detale.",
+    "Projekty i wersje demonstracyjne stron dla rzemieślników i punktów usług — warsztat samochodowy, tartak, wykończenia wnętrz, serwis opon i usługi lokalne. Zobacz strukturę, teksty i detale.",
   alternates: { canonical: "/portfolio/" },
 };
 
@@ -22,7 +22,7 @@ const collectionSchema = {
   url: `${SITE_URL}/portfolio/`,
   name: "Portfolio — strony internetowe dla rzemieślników",
   description:
-    "Projekty i wersje demonstracyjne stron dla rzemieślników: warsztat samochodowy, tartak, wykończenia wnętrz i serwis opon.",
+    "Projekty i wersje demonstracyjne stron dla rzemieślników i punktów usług: warsztat samochodowy, tartak, wykończenia wnętrz, serwis opon i usługi lokalne.",
   inLanguage: "pl-PL",
   mainEntity: {
     "@type": "ItemList",
@@ -58,7 +58,7 @@ export default function PortfolioPage() {
       {/* Siatka projektów */}
       <Section
         eyebrow="Projekty"
-        title="Cztery strony, cztery branże — w tym dwie motoryzacyjne"
+        title="Pięć stron, pięć branż — od motoryzacji po usługi lokalne"
         lead="Każda zbudowana od zera: struktura pod wyszukiwanie, teksty pod zapytania klientów, kontakt widoczny na wyciągnięcie ręki. Kliknij miniaturę — zobaczysz szczegóły bez opuszczania strony."
       >
         <ProjectGrid projects={projects} />

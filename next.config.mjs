@@ -1,4 +1,12 @@
 /** @type {import('next').NextConfig} */
+// Next.js (App Router) wstrzykuje inline-skrypty bootstrapujące hydrację,
+// a w trybie dev dodatkowo używa eval (HMR). Dlatego CSP musi dopuszczać
+// 'unsafe-inline' (i 'unsafe-eval' w dev) — inaczej React się nie hydratuje.
+const isDev = process.env.NODE_ENV !== "production";
+const scriptSrc = isDev
+  ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
+  : "script-src 'self' 'unsafe-inline'";
+
 const nextConfig = {
   // Statyczny export — deklaratywny HTML (AEO-safe), hosting dowolny (Vercel/Netlify/cPanel)
   output: "export",
@@ -22,8 +30,7 @@ const nextConfig = {
         headers: [
           {
             key: "Content-Security-Policy",
-            value:
-              "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';",
+            value: `default-src 'self'; ${scriptSrc}; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';`,
           },
           { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains" },
           { key: "X-Frame-Options", value: "DENY" },

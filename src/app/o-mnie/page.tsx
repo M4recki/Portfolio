@@ -5,8 +5,8 @@ import { SITE_URL } from "@/lib/site";
 import type { Metadata } from "next";
 import Section from "@/components/Section";
 import Button from "@/components/Button";
+import ContactForm from "@/components/ContactForm";
 import Reveal from "@/components/Reveal";
-import Link from "next/link";
 import { persona, processSteps } from "@/lib/data";
 
 export const metadata: Metadata = {
@@ -159,50 +159,56 @@ export default function OMniePage() {
         </div>
       </Section>
 
-      {/* CTA */}
-      <Section dark className="!py-0">
-        <div className="py-12 text-center sm:py-16">
-          <h2 className="font-heading text-3xl sm:text-4xl">
-            Zadzwoń — rozmowa nic nie kosztuje
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-ink-soft">
-            Powiedz, czym się zajmujesz i co nie działa teraz. W 30 minutach wiesz więcej niż po tygodniu
-            dokumentów.
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <Button href={persona.phoneHref} variant="primary">
-              {persona.phone}
-            </Button>
-            <Button href="/kontakt/" variant="secondary">
-              Wyślij wiadomość
-            </Button>
+      {/* Kontakt — krótki formularz */}
+      <Section
+        id="napisz"
+        eyebrow="Napisz do mnie"
+        title="Opowiedz o swojej robocie — resztę ustalimy w rozmowie"
+        lead="Dwa–trzy zdania wystarczą na start. Odpowiadam osobiście, zwykle w ciągu 24 godzin."
+      >
+        <div className="grid gap-10 lg:grid-cols-5">
+          <div className="lg:col-span-3">
+            <ContactForm />
           </div>
-        </div>
-      </Section>
 
-      {/* Social — profile (R8: stopka + O mnie) */}
-      <Section eyebrow="Gdzie mnie znaleźć" title="Profile w sieci">
-        <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
-          {persona.linkedin && (
-            <Link
-              href={persona.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex h-10 items-center gap-2 rounded-lg border border-line px-4 py-2 text-sm font-medium text-ink-soft hover:border-accent-dark hover:text-ink transition-colors"
-            >
-              <span aria-hidden="true">in</span> LinkedIn
-            </Link>
-          )}
-          {persona.github && (
-            <Link
-              href={persona.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex h-10 items-center gap-2 rounded-lg border border-line px-4 py-2 text-sm font-medium text-ink-soft hover:border-accent-dark hover:text-ink transition-colors"
-            >
-              <span aria-hidden="true">⌘</span> GitHub
-            </Link>
-          )}
+          <div className="flex flex-col gap-6 lg:col-span-2">
+            <div className="rounded-2xl border border-line bg-paper p-6">
+              <h3 className="font-heading text-lg text-ink">Wolisz porozmawiać?</h3>
+              <p className="mt-2 text-sm leading-relaxed text-ink-soft">
+                Zadzwoń — w 30 minut powiem Ci, czy strona ma sens i od czego zacząć. Rozmowa nic
+                nie kosztuje.
+              </p>
+              <div className="mt-4">
+                <Button href={persona.phoneHref}>{persona.phone}</Button>
+              </div>
+              <p className="mt-3 text-sm">
+                <a
+                  href={persona.emailHref}
+                  className="text-ink-soft underline decoration-accent underline-offset-4 hover:text-ink"
+                >
+                  {persona.email}
+                </a>
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-line bg-paper p-6">
+              <h3 className="font-heading text-lg text-ink">Co dalej po wiadomości</h3>
+              <ol className="mt-3 flex flex-col gap-3 text-sm leading-relaxed text-ink-soft">
+                <li>
+                  <span className="font-semibold text-ink">1. Odpowiedź w 24 h</span> — konkretnie:
+                  co ma sens, a co nie.
+                </li>
+                <li>
+                  <span className="font-semibold text-ink">2. Krótka rozmowa</span> — 30 minut o
+                  Twojej robocie i klientach.
+                </li>
+                <li>
+                  <span className="font-semibold text-ink">3. Oferta z ceną startową</span> — bez
+                  gwiazdek i ukrytych kosztów.
+                </li>
+              </ol>
+            </div>
+          </div>
         </div>
       </Section>
     </>
